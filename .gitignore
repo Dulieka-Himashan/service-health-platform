@@ -1,0 +1,25 @@
+# Dependencies
+node_modules/
+
+# Environment variables (NEVER commit secrets)
+.env
+.env.local
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Build output
+dist/
+build/
+
+# Editor/IDE
+.vscode/
+.idea/
+
+# Docker
+*.pid
