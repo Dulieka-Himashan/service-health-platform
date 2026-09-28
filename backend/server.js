@@ -23,8 +23,13 @@ app.get('/services', async (req, res) => {
 });
 
 app.post('/services', async (req, res) => {
+  const { name, url, description, environment, status } = req.body || {};
+
+  if (!name || !url) {
+    return res.status(400).json({ error: 'name and url are required' });
+  }
+
   try {
-    const { name, url, description, environment, status } = req.body;
     const result = await pool.query(
       'INSERT INTO services (name, url, description, environment, status) VALUES ($1, $2, $3, $4, $5) RETURNING *',
       [name, url, description, environment, status || 'UNKNOWN']
@@ -54,8 +59,18 @@ app.get('/incidents', async (req, res) => {
 });
 
 app.post('/incidents', async (req, res) => {
+  const { service_id, title, description, severity, status } = req.body || {};
+
+  if (!title || !Number.isInteger(service_id)) {
+    return res.status(400).json({ error: 'title and a numeric service_id are required' });
+  }
+
   try {
-    const { service_id, title, description, severity, status } = req.body;
+    const service = await pool.query('SELECT id FROM services WHERE id = $1', [service_id]);
+    if (service.rows.length === 0) {
+      return res.status(404).json({ error: 'service not found' });
+    }
+
     const result = await pool.query(
       'INSERT INTO incidents (service_id, title, description, severity, status) VALUES ($1, $2, $3, $4, $5) RETURNING *',
       [service_id, title, description, severity, status || 'OPEN']
