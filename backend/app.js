@@ -11,6 +11,16 @@ app.get('/health', (req, res) => {
   res.json({ status: 'healthy' });
 });
 
+app.get('/ready', async (req, res) => {
+  try {
+    await pool.query('SELECT 1');
+    res.json({ status: 'ready' });
+  } catch (err) {
+    console.error('Readiness check failed:', err.message);
+    res.status(503).json({ status: 'not ready' });
+  }
+});
+
 app.get('/services', async (req, res) => {
   try {
     const result = await pool.query('SELECT * FROM services');
