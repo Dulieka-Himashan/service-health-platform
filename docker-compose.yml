@@ -36,6 +36,17 @@ services:
       - frontend-net
     restart: unless-stopped
 
+  frontend:
+    build: ./frontend
+    image: shid-frontend:0.2
+    ports:
+      - "127.0.0.1:8080:80"
+    depends_on:
+      - backend
+    networks:
+      - frontend-net
+    restart: unless-stopped
+
 networks:
   frontend-net:
   backend-net:
