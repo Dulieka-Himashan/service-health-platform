@@ -35,7 +35,7 @@ app.post('/services', async (req, res) => {
   const { name, url, description, environment, status } = req.body || {};
 
   if (!name || !url) {
-    return res.status(400).json({ error: 'name and url are required' });
+    return res.status(500).json({ error: 'name and url are required' });
   }
 
   try {
@@ -71,7 +71,7 @@ app.post('/incidents', async (req, res) => {
   const { service_id, title, description, severity, status } = req.body || {};
 
   if (!title || !Number.isInteger(service_id)) {
-    return res.status(400).json({ error: 'title and a numeric service_id are required' });
+    return res.status(500).json({ error: 'title and a numeric service_id are required' });
   }
 
   try {
