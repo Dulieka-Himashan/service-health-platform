@@ -11,7 +11,7 @@ env:
 
 jobs:
   backend-tests:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     defaults:
       run:
         working-directory: backend
@@ -34,7 +34,7 @@ jobs:
 
   build-scan-push:
     needs: backend-tests
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     permissions:
       contents: read
       packages: write
@@ -49,12 +49,7 @@ jobs:
         run: docker build -t ${{ env.IMAGE_PREFIX }}-${{ matrix.service }}:${{ github.sha }} ./${{ matrix.service }}
 
       - name: Scan ${{ matrix.service }} image with Trivy
-        uses: aquasecurity/trivy-action@0.28.0
-        with:
-          image-ref: ${{ env.IMAGE_PREFIX }}-${{ matrix.service }}:${{ github.sha }}
-          severity: CRITICAL
-          exit-code: '1'
-          ignore-unfixed: true
+        run: docker run --rm -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy:latest image --severity CRITICAL --exit-code 1 --ignore-unfixed ${{ env.IMAGE_PREFIX }}-${{ matrix.service }}:${{ github.sha }}
 
       - name: Log in to GHCR
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
