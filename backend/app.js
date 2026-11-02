@@ -2,6 +2,9 @@ const express = require('express');
 const pool = require('./db');
 const app = express();
 app.use(express.json());
+const metrics = require('./metrics');
+app.use(metrics.middleware);
+app.get('/metrics', metrics.handler);
 
 app.get('/', (req, res) => {
   res.send('Service Health & Incident Dashboard - Backend is running');
