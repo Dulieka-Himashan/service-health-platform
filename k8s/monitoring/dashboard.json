@@ -1,0 +1,34 @@
+{
+  "uid": "shid-backend",
+  "title": "Service Health - Backend",
+  "schemaVersion": 39,
+  "version": 1,
+  "refresh": "10s",
+  "time": { "from": "now-30m", "to": "now" },
+  "panels": [
+    {
+      "id": 1, "type": "stat", "title": "Backend pods up",
+      "gridPos": { "h": 5, "w": 6, "x": 0, "y": 0 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "targets": [ { "refId": "A", "expr": "count(up{job='backend'} == 1) or vector(0)" } ]
+    },
+    {
+      "id": 2, "type": "timeseries", "title": "Requests per second by route",
+      "gridPos": { "h": 8, "w": 18, "x": 6, "y": 0 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "targets": [ { "refId": "A", "expr": "sum(rate(http_request_duration_seconds_count[1m])) by (route)", "legendFormat": "{{route}}" } ]
+    },
+    {
+      "id": 3, "type": "timeseries", "title": "5xx responses per second (readiness failures show up here)",
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 8 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "targets": [ { "refId": "A", "expr": "sum(rate(http_request_duration_seconds_count{status=~'5..'}[1m])) by (route, status)", "legendFormat": "{{route}} {{status}}" } ]
+    },
+    {
+      "id": 4, "type": "timeseries", "title": "p95 latency (seconds)",
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 8 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "targets": [ { "refId": "A", "expr": "histogram_quantile(0.95, sum(rate(http_request_duration_seconds_bucket[5m])) by (le))", "legendFormat": "p95" } ]
+    }
+  ]
+}
