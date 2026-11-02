@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: backend
-          image: ghcr.io/dulieka-himashan/service-health-platform-backend:b33c075a535050434c32c9bd7818eccc5f57ab5e
+          image: ghcr.io/dulieka-himashan/service-health-platform-backend:ed3ac37b9a6a85c6327b8b5e7526f14e1ba441ab
           ports:
             - containerPort: 3000
           envFrom:
