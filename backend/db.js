@@ -9,4 +9,10 @@ const pool = new Pool({
   port: Number(process.env.DB_PORT),
 });
 
+// An idle client can error when the database goes away. Without a listener,
+// Node treats this as an uncaught exception and the process exits.
+pool.on('error', (err) => {
+  console.error('Unexpected error on idle database client:', err.message);
+});
+
 module.exports = pool;
