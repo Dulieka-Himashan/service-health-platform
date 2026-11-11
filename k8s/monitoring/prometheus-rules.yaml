@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: prometheus-rules
+  namespace: monitoring
+data:
+  backend.yml: |
+    groups:
+      - name: backend
+        rules:
+          - alert: BackendNotReady
+            expr: sum(rate(http_request_duration_seconds_count{route="/ready",status="503"}[1m])) > 0
+            for: 1m
+            labels:
+              severity: critical
+            annotations:
+              summary: "Backend readiness is failing - the database may be unreachable"
