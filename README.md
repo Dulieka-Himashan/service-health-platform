@@ -67,7 +67,9 @@ Secrets are created by command and are **not** in the repo.
 ```bash
 minikube start
 kubectl apply -f k8s/namespace.yaml
-kubectl -n shid create secret generic db-credentials --from-literal=DB_PASSWORD='<your-password>' \
+kubectl -n shid create secret generic db-credentials \
+  --from-literal=POSTGRES_DB=<db-name> \
+  --from-literal=POSTGRES_USER=<db-user> \
   --from-literal=POSTGRES_PASSWORD='<your-password>'
 kubectl -n shid create configmap db-init --from-file=database/init.sql
 kubectl apply -f k8s/
