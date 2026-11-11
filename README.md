@@ -118,7 +118,17 @@ The runner is pinned to `ubuntu-24.04`.
 
 ## Screenshots
 
-Add to `docs/screenshots/`: Grafana dashboard, CI run history, GHCR packages, stalled bad rollout, Grafana during outage, Jira board.
+Healthy state:
+
+![Grafana healthy](docs/screenshots/grafana-healthy.png)
+
+During a database outage (backends not ready, restarts unchanged):
+
+![Grafana during DB outage](docs/screenshots/grafana-outage.png)
+
+Alert firing in Prometheus:
+
+![BackendNotReady alert firing](docs/screenshots/prometheus-alert-firing.png)
 
 ## Lessons learned
 
